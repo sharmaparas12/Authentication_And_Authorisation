@@ -1,4 +1,4 @@
-const {User}=require('../models/index');
+const {User,Role}=require('../models/index');
 class UserRepository{
     async create(data){
         try {
@@ -48,11 +48,39 @@ class UserRepository{
                     email:useremail
                 }
             });
+            
             return user;
             
 
         } catch (error) {
             console.log("error in repository");
+            throw {error};
+            
+        }
+    }
+    async isadmin(userId)
+    {
+        try {
+            const user=await User.findByPk(userId);
+            const role=await Role.findOne({
+                where:{
+                    name:"Admin"
+                }
+            });
+            var e={
+
+            };
+            const result= await user.hasRole(role);
+            console.log(result);
+            if(!result){
+                console.log('i am in');
+
+            throw {e};
+            }
+            return result;
+            
+        } catch (error) {
+            console.log("error in serviiice layer");
             throw error;
             
         }

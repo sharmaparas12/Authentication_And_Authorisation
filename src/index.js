@@ -2,10 +2,11 @@ const express=require('express');
 const bodyparser=require('body-parser');
 const apiRoutes=require('./Routes/index');
 const app=express();
+const{Role,User}=require('./models/index');
 const {PORT}=require('./config/serverconfig');
 const Userservie=require('./services/user-service');
 const UserRepository=require('./repository/user-repository');
-
+const db=require('./models/index');
 const PrepareAndStartserver= () => {
     app.use(bodyparser.json());
     app.use(bodyparser.urlencoded({extended:true}));
@@ -13,6 +14,14 @@ const PrepareAndStartserver= () => {
    
     app.listen(PORT,async () => {
         console.log("server started at "+ PORT);
+        if(process.env.DB_SYNC=='true')
+        {
+            
+            db.sequelize.sync({alter:true});
+        }
+        // const u1=await User.findByPk(3);
+        // const r1=await Role.findByPk(1);
+        // r1.addUser(u1);
         // const obj=new UserRepository();
         // const response=await obj.get(1);
         // console.log(response);

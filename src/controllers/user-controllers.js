@@ -52,7 +52,63 @@ const Signin=async (req,res) => {
         
     }
 }
+const isauthenticated=async (req,res) => {
+    try {
+        const token=req.headers['x-success-token'];
+        const response=await userservie.isauthenticated(token);
+        return res.status(400).json({
+            message:'authentication success',
+            data:response,
+            status:true,
+            err:{}
+        });
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:'something went wrong in controllers',
+            data:{},
+            status:false,
+            err:error
+        });
+        
+
+        
+    }
+
+}
+const isadmin=async (req,res) => {
+    try {
+        const response=userservie.isadmin(req.body.id);
+        return res.status(400).json({
+            message:'authorisation success',
+            data:response,
+            status:true,
+            err:{}
+        });
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:'something went wrong in controllers',
+            data:{},
+            status:false,
+            err:error
+        });
+        
+
+        
+    }
+
+}
+
+
+
+
+
 module.exports={
     create,
-    Signin
+    Signin,
+    isauthenticated,
+    isadmin
 }

@@ -2,6 +2,7 @@ const UserRepository=require('../repository/user-repository');
 const jwt = require('jsonwebtoken');
 const bcrypt=require('bcrypt');
 const {JWT_KEY}=require('../config/serverconfig');
+const { use, trace } = require('../Routes');
 class Userservie{
     constructor()
     {
@@ -53,7 +54,6 @@ class Userservie{
     async Signin(useremail,userpassword){
         try {
             const user=await this.userRepository.getbyEmail(useremail);
-            console.log(user);
             const passwordmatch=this.checkpassword(userpassword,user.password);
             if(!passwordmatch){
                 console.log("password doesnot mathc");
@@ -68,5 +68,38 @@ class Userservie{
             
         }
     }
+    async isauthenticated(token)
+    {
+        
+        try {
+            const result=this.verifyToken(token);
+        if(!result)
+        {
+            return error;
+        }
+        const user=await this.userRepository.get(result.id);
+        console.log(user.id);
+        return user.id;
+            
+        } catch (error) {
+            console.log("error in serviiice layer");
+            throw error;
+
+            
+        }
+    }
+    async isadmin(userId)
+    {
+        try {
+            const response=await this.userRepository.isadmin(userId);
+            return response;
+            
+        } catch (error) {
+            console.log("error in serviiice layer");
+            throw error;
+            
+        }
+    }
+
 }
 module.exports=Userservie;
