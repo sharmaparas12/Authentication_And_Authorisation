@@ -71,12 +71,7 @@ class UserRepository{
 
             };
             const result= await user.hasRole(role);
-            console.log(result);
-            if(!result){
-                console.log('i am in');
-
-            throw {e};
-            }
+            
             return result;
             
         } catch (error) {

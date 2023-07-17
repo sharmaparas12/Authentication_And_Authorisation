@@ -79,7 +79,8 @@ const isauthenticated=async (req,res) => {
 }
 const isadmin=async (req,res) => {
     try {
-        const response=userservie.isadmin(req.body.id);
+        const response= await userservie.isadmin(req.body.id);
+        console.log("this is the "+response);
         return res.status(400).json({
             message:'authorisation success',
             data:response,
